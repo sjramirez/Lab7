@@ -6,11 +6,11 @@
 //   - One for fetch requests
 let CACHE_ENTRIES = 'my-site-cache-v1';
 let urlsToCache = [
-    '/',
-    'scripts/script.js',
-    'scripts/router.js',
-    '/index.html',
-    '/style.css',
+    './',
+    './scripts/script.js',
+    './scripts/router.js',
+    './index.html',
+    './style.css',
     'https://cse110lab6.herokuapp.com/entries'
 ];
 
