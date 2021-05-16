@@ -11,7 +11,7 @@ router.setState = function( state, element) {
   const headerFont = document.querySelector('header h1');
   if(state == "settings")
   {
-    history.pushState(null,null,"settings");
+    history.pushState("settings",null,"settings");
     //history.pushState(body.className,body.className,"settings");
     headerFont.textContent = "Settings";
     body.className = "settings";
@@ -19,8 +19,10 @@ router.setState = function( state, element) {
 
   else if(state == "single-entry")
   {
+    //getEntryNumber
     history.pushState(element,null,"entry");
     body.className = "single-entry";
+    headerFont.textContent = "Single Entry";
     let single = document.querySelector('entry-page');
     if(single.shadowRoot.querySelector('.post .entry-image'))
     {
@@ -32,7 +34,7 @@ router.setState = function( state, element) {
 
   else if(state == "")
   {
-    history.pushState(null,null,"index.html");
+    history.pushState(null,null,"");
     body.className = "";
     headerFont.textContent="Journal Entries";
   }
@@ -80,7 +82,11 @@ settingCog.addEventListener('click', () => {
 
 window.addEventListener('popstate', e => {
   let prev=history.state;
-  if(e.state){
+  if(e.state == "settings")
+  {
+    goBack("settings", e.state);
+  }
+  else if(e.state){
     goBack("single-entry", e.state);
   }
   else{
@@ -96,8 +102,9 @@ function goBack(state,entry)
     body.className = state;
     headerFont.textContent="Journal Entries";
   }
-  else{
+  else if (state == "single-entry"){
     body.className = state;
+    headerFont.textContent="Single Entry";
     let single = document.querySelector('entry-page');
     if(single.shadowRoot.querySelector('.post .entry-image'))
     {
@@ -105,6 +112,10 @@ function goBack(state,entry)
       img.remove();
     }
     single.entry = entry;  
+  }
+  else{
+    body.className = state;
+    headerFont.textContent = "Settings";
   }
 }
 
@@ -118,6 +129,11 @@ document.addEventListener('click', () => {
  else if(clickedElement.matches('header img'))
  {
    router.setState("settings", null);
+ }
+
+ else if(clickedElement.matches('header h1'))
+ {
+   router.setState("", null);
  }
 });
 
