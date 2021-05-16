@@ -16,3 +16,16 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 });
+
+
+if ('serviceWorker' in navigator){
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw.js').then(function(registration) {
+      //was successful
+      console.log('ServiceWorker registration sucessful with scope: ', registration.scope);
+    }, function(err){
+        //registration failed :(
+        console.log('registration failed: ', err);
+    });
+  });
+}
