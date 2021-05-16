@@ -1,11 +1,42 @@
 // router.js
 
 export const router = {};
-
 /**
  * Changes the "page" (state) that your SPA app is currently set to
  */
-router.setState = function() {
+
+
+router.setState = function( state, element) {
+  const body = document.querySelector('body');
+  const headerFont = document.querySelector('header h1');
+  if(state == "settings")
+  {
+    history.pushState(null,null,"settings");
+    //history.pushState(body.className,body.className,"settings");
+    headerFont.textContent = "Settings";
+    body.className = "settings";
+  }
+
+  else if(state == "single-entry")
+  {
+    history.pushState(element,null,"entry");
+    body.className = "single-entry";
+    let single = document.querySelector('entry-page');
+    if(single.shadowRoot.querySelector('.post .entry-image'))
+    {
+      let img = single.shadowRoot.querySelector('.post .entry-image');
+      img.remove();
+    }
+    single.entry = element;  
+  }
+
+  else if(state == "")
+  {
+    history.pushState(null,null,"index.html");
+    body.className = "";
+    headerFont.textContent="Journal Entries";
+  }
+    
   /**
    * - There are three states that your SPA app will have
    *    1. The home page
@@ -36,3 +67,57 @@ router.setState = function() {
    *    2. You may modify the parameters of setState() as much as you like
    */
 }
+
+
+const settingCog = document.querySelector('header img');
+
+/*
+settingCog.addEventListener('click', () => {
+  //console.log(settingCog.src);
+  router.setState("settings");
+});
+*/
+
+window.addEventListener('popstate', e => {
+  let prev=history.state;
+  if(e.state){
+    goBack("single-entry", e.state);
+  }
+  else{
+    goBack("", null);
+  }
+});
+
+function goBack(state,entry)
+{
+  const body = document.querySelector('body');
+  const headerFont = document.querySelector('header h1');
+  if(state == ""){
+    body.className = state;
+    headerFont.textContent="Journal Entries";
+  }
+  else{
+    body.className = state;
+    let single = document.querySelector('entry-page');
+    if(single.shadowRoot.querySelector('.post .entry-image'))
+    {
+      let img = single.shadowRoot.querySelector('.post .entry-image');
+      img.remove();
+    }
+    single.entry = entry;  
+  }
+}
+
+document.addEventListener('click', () => {
+ let clickedElement = event.target;
+ if(clickedElement.matches('journal-entry'))
+ {
+   console.log(clickedElement);
+   router.setState("single-entry", clickedElement.entry);
+ }
+ else if(clickedElement.matches('header img'))
+ {
+   router.setState("settings", null);
+ }
+});
+

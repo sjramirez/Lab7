@@ -6,7 +6,7 @@ const setState = router.setState;
 // Make sure you register your service worker here too
 
 document.addEventListener('DOMContentLoaded', () => {
-  fetch('http://localhost:3000/entries')
+  fetch('https://cse110lab6.herokuapp.com/entries')
     .then(response => response.json())
     .then(entries => {
       entries.forEach(entry => {
